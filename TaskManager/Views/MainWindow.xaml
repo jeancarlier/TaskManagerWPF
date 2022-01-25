@@ -93,7 +93,7 @@
                             <Setter Property="Background" Value="LightGreen"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=Overdue}" Value="true">
-                            <Setter Property="Background" Value="Yellow"/>
+                            <Setter Property="Background" Value="LightCoral"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
