@@ -38,11 +38,11 @@ namespace TaskManager.ViewModels
         /// </summary>
         public TaskViewModel()
         {
-            TasksList.Add(new TaskModel { Id = 1, Description = "Create user form", Date = new DateTime(2022, 2, 15), Concluded = false, Overdue = isOverdue(new DateTime(2022, 2, 15), false), State = getStateDescription(new DateTime(2022, 2, 15), false) });
-            TasksList.Add(new TaskModel { Id = 2, Description = "Create delete user functionality", Date = new DateTime(2022, 2, 10), Concluded = false, Overdue = isOverdue(new DateTime(2022, 2, 10), false), State = getStateDescription(new DateTime(2022, 2, 10), false) });
-            TasksList.Add(new TaskModel { Id = 3, Description = "Create edit user form", Date = new DateTime(2022, 2, 16), Concluded = true, Overdue = isOverdue(new DateTime(2022, 2, 16), true), State = getStateDescription(new DateTime(2022, 2, 16), true) });
-            TasksList.Add(new TaskModel { Id = 4, Description = "Test full application", Date = new DateTime(2022, 1, 10), Concluded = false, Overdue = isOverdue(new DateTime(2022, 1, 10), false), State = getStateDescription(new DateTime(2022, 1, 10), false) });
-            TasksList.Add(new TaskModel { Id = 5, Description = "Deploy 1st version of application", Date = new DateTime(2022, 2, 20), Concluded = false, Overdue = isOverdue(new DateTime(2022, 2, 20), false), State = getStateDescription(new DateTime(2022, 2, 20), false) });
+            TasksList.Add(new TaskModel { Id = 1, Description = "Create user form", Date = new DateTime(2022, 2, 15), Completed = false, Overdue = isOverdue(new DateTime(2022, 2, 15), false), State = getStateDescription(new DateTime(2022, 2, 15), false) });
+            TasksList.Add(new TaskModel { Id = 2, Description = "Create delete user functionality", Date = new DateTime(2022, 2, 10), Completed = false, Overdue = isOverdue(new DateTime(2022, 2, 10), false), State = getStateDescription(new DateTime(2022, 2, 10), false) });
+            TasksList.Add(new TaskModel { Id = 3, Description = "Create edit user form", Date = new DateTime(2022, 2, 16), Completed = true, Overdue = isOverdue(new DateTime(2022, 2, 16), true), State = getStateDescription(new DateTime(2022, 2, 16), true) });
+            TasksList.Add(new TaskModel { Id = 4, Description = "Test full application", Date = new DateTime(2022, 1, 10), Completed = false, Overdue = isOverdue(new DateTime(2022, 1, 10), false), State = getStateDescription(new DateTime(2022, 1, 10), false) });
+            TasksList.Add(new TaskModel { Id = 5, Description = "Deploy 1st version of application", Date = new DateTime(2022, 2, 20), Completed = false, Overdue = isOverdue(new DateTime(2022, 2, 20), false), State = getStateDescription(new DateTime(2022, 2, 20), false) });
 
             DeleteCommand = new TaskDeleteCommand(this);
             NewTaskCommand = new NewTaskCommand(this);
@@ -72,7 +72,7 @@ namespace TaskManager.ViewModels
         /// <summary>
         /// Identifies if the task is done
         /// </summary>
-        public bool Concluded
+        public bool Completed
         {
             get { return _concluded; }
             set { _concluded = value; }
@@ -115,7 +115,7 @@ namespace TaskManager.ViewModels
                         Description = value.Description,
                         Date = value.Date,
                         Overdue = value.Overdue,
-                        Concluded = value.Concluded,
+                        Completed = value.Completed,
                         State = value.State
                     };
                     this.OnPropertyChanged("SelectedTask");
@@ -190,7 +190,7 @@ namespace TaskManager.ViewModels
                     Id = index,
                     Description = "",
                     Date = DateTime.Now,
-                    Concluded = false,
+                    Completed = false,
                     Overdue = isOverdue(DateTime.Now, false)
                 };
 
@@ -209,8 +209,8 @@ namespace TaskManager.ViewModels
         public void Save() {
             if (SelectedTask != null)
             {
-                SelectedTask.Overdue = isOverdue(SelectedTask.Date, SelectedTask.Concluded);
-                SelectedTask.State = getStateDescription(SelectedTask.Date, SelectedTask.Concluded);
+                SelectedTask.Overdue = isOverdue(SelectedTask.Date, SelectedTask.Completed);
+                SelectedTask.State = getStateDescription(SelectedTask.Date, SelectedTask.Completed);
 
                 var existentRecord = TasksList.Where(T => T.Id == SelectedTask.Id).FirstOrDefault();
                 if (existentRecord == null)
@@ -221,9 +221,9 @@ namespace TaskManager.ViewModels
                 else {
                     existentRecord.Description = SelectedTask.Description;
                     existentRecord.Date = SelectedTask.Date;
-                    existentRecord.Concluded = SelectedTask.Concluded;
-                    existentRecord.State = getStateDescription(SelectedTask.Date, SelectedTask.Concluded);
-                    existentRecord.Overdue = isOverdue(SelectedTask.Date, SelectedTask.Concluded);
+                    existentRecord.Completed = SelectedTask.Completed;
+                    existentRecord.State = getStateDescription(SelectedTask.Date, SelectedTask.Completed);
+                    existentRecord.Overdue = isOverdue(SelectedTask.Date, SelectedTask.Completed);
                 }
                                 
                 SelectedTask = null;
@@ -260,7 +260,7 @@ namespace TaskManager.ViewModels
         {
             if (concluded)
             {
-                return "Concluded";
+                return "Completed";
             }
             else if (isOverdue(date,concluded))
             {

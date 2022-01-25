@@ -54,15 +54,15 @@ namespace TaskManager.Models
         }
 
         /// <summary>
-        /// Task Concluded
+        /// Task Completed
         /// </summary>
-        public bool Concluded 
+        public bool Completed 
         {
             get { return _concluded; }
             set
             {
                 _concluded = value;
-                this.OnPropertyChanged("Concluded");
+                this.OnPropertyChanged("Completed");
             }
         }
 
@@ -97,7 +97,7 @@ namespace TaskManager.Models
         {
             this.OnPropertyChanged("Description");
             this.OnPropertyChanged("Date");
-            this.OnPropertyChanged("Concluded");
+            this.OnPropertyChanged("Completed");
             this.OnPropertyChanged("Overdue");
             this.OnPropertyChanged("State");
         }

@@ -61,8 +61,8 @@
                                 IsEnabled="{Binding Path=CanSaveTask}"
                                 Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="4"  Margin="0,10"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="1" Text="Concluded: " Margin="0,0"/>
-                    <CheckBox x:Name="SelectedTask_Concluded" IsChecked="{Binding Path=SelectedTask.Concluded, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="Completed: " Margin="0,0"/>
+                    <CheckBox x:Name="SelectedTask_Completed" IsChecked="{Binding Path=SelectedTask.Completed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  
                               IsEnabled="{Binding Path=CanSaveTask}"
                               VerticalAlignment="Center" Grid.Row="3" Grid.Column="2"/>
 
@@ -89,7 +89,7 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Concluded}" Value="true">
+                        <DataTrigger Binding="{Binding Path=Completed}" Value="true">
                             <Setter Property="Background" Value="LightGreen"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=Overdue}" Value="true">
