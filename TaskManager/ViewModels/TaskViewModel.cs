@@ -21,7 +21,19 @@ namespace TaskManager.ViewModels
         
         private ObservableCollection<TaskModel> _tasks = new ObservableCollection<TaskModel>();
         private TaskModel _selectedTask;
-        
+
+        private bool _enableEditFields;
+
+        public bool EnableEditFields
+        {
+            get { return _enableEditFields; }
+            set {                 
+                _enableEditFields = value;
+                this.OnPropertyChanged("EnableEditFields");
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
@@ -47,6 +59,8 @@ namespace TaskManager.ViewModels
             DeleteCommand = new TaskDeleteCommand(this);
             NewTaskCommand = new NewTaskCommand(this);
             SaveTaskCommand = new SaveTaskCommand(this);
+
+            EnableEditFields = false;
 
             CurrentDate = DateTime.Now.ToString("MMMM dd, yyyy");
         }
@@ -118,6 +132,7 @@ namespace TaskManager.ViewModels
                         Completed = value.Completed,
                         State = value.State
                     };
+                    EnableEditFields = true;
                     this.OnPropertyChanged("SelectedTask");
                 }
                 else {
@@ -168,7 +183,10 @@ namespace TaskManager.ViewModels
             {
                 if (SelectedTask != null && MessageBox.Show($"Do you really want to delete the task {SelectedTask.Id}?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    TasksList.Remove(TasksList.Where(T => T.Id == SelectedTask.Id).First());                    
+                    TasksList.Remove(TasksList.Where(T => T.Id == SelectedTask.Id).First());
+                    SelectedTask = GetEmptyTask();
+                    this.OnPropertyChanged("SelectedTask");
+                    EnableEditFields = false;
                 }
             }
             catch (Exception ex)
@@ -178,21 +196,32 @@ namespace TaskManager.ViewModels
         }
 
         /// <summary>
+        /// Retrun an empty object 
+        /// </summary>
+        /// <returns></returns>
+        public TaskModel GetEmptyTask()
+        {
+            var index = TasksList.Count > 0 ? TasksList.Max(o => o.Id) + 1 : 1;
+            return  new TaskModel
+            {
+                Id = index,
+                Description = "",
+                Date = DateTime.Now,
+                Completed = false,
+                Overdue = isOverdue(DateTime.Now, false)
+            };
+        }
+
+        /// <summary>
         /// Clear the current selected task and prepares to edit and save
         /// </summary>
         public void NewTask()
         {
             try
-            {
-                var index = TasksList.Count > 0 ? TasksList.Max(o => o.Id) + 1 : 1;
-                SelectedTask = new TaskModel
-                {
-                    Id = index,
-                    Description = "",
-                    Date = DateTime.Now,
-                    Completed = false,
-                    Overdue = isOverdue(DateTime.Now, false)
-                };
+            {                
+                SelectedTask = GetEmptyTask();
+
+                EnableEditFields = true;
 
                 this.OnPropertyChanged("SelectedTask");
 
@@ -225,7 +254,8 @@ namespace TaskManager.ViewModels
                     existentRecord.State = getStateDescription(SelectedTask.Date, SelectedTask.Completed);
                     existentRecord.Overdue = isOverdue(SelectedTask.Date, SelectedTask.Completed);
                 }
-                                
+
+                EnableEditFields = false;
                 SelectedTask = null;
                 this.OnPropertyChanged("SelectedTask");
             }
